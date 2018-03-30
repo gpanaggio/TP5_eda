@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2015
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TP5_EDA", "TP5_EDA\TP5_EDA.vcxproj", "{694CE3B1-4F53-4996-92B7-B9EB5AEB519E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{694CE3B1-4F53-4996-92B7-B9EB5AEB519E}.Debug|x64.ActiveCfg = Debug|x64
+		{694CE3B1-4F53-4996-92B7-B9EB5AEB519E}.Debug|x64.Build.0 = Debug|x64
+		{694CE3B1-4F53-4996-92B7-B9EB5AEB519E}.Debug|x86.ActiveCfg = Debug|Win32
+		{694CE3B1-4F53-4996-92B7-B9EB5AEB519E}.Debug|x86.Build.0 = Debug|Win32
+		{694CE3B1-4F53-4996-92B7-B9EB5AEB519E}.Release|x64.ActiveCfg = Release|x64
+		{694CE3B1-4F53-4996-92B7-B9EB5AEB519E}.Release|x64.Build.0 = Release|x64
+		{694CE3B1-4F53-4996-92B7-B9EB5AEB519E}.Release|x86.ActiveCfg = Release|Win32
+		{694CE3B1-4F53-4996-92B7-B9EB5AEB519E}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F35FD3FD-6D0B-4FBA-8134-C10FDE30FD99}
+	EndGlobalSection
+EndGlobal
