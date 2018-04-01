@@ -152,7 +152,7 @@ void Worm::draw(void)
 			}
 			else if (CountJump < JUMPEND)
 			{
-				al_draw_bitmap(bitmapJump[5], pos.get_x(), pos.get_y() + tiro_oblicuo(), ALLEGRO_FLIP_HORIZONTAL);	//dibujamos la imagen 5 (mirando a la izquierda)
+				al_draw_bitmap(bitmapJump[5], pos.get_x(), pos.get_y() - tiro_oblicuo(), ALLEGRO_FLIP_HORIZONTAL);	//dibujamos la imagen 5 (mirando a la izquierda)
 			}
 			else
 			{
@@ -163,7 +163,10 @@ void Worm::draw(void)
 	}
 	else if (estado == ESPERANDO)
 	{
+		if (worm_direction == LEFT) 
 		al_draw_bitmap(bitmapWalk[1], pos.get_x(), pos.get_y(), 0);
+		else
+		al_draw_bitmap(bitmapWalk[1], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
 	}
 }
 
