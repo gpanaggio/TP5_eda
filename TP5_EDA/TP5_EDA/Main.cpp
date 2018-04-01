@@ -1,6 +1,6 @@
 #include "allegroClass.h"
 #include "EventHandler.h"
-#include "info.h"  // Header de la estructura info
+#include "userData.h"  // Header de la estructura info
 
 
 
@@ -17,12 +17,12 @@ int main() {
 
 	allegro_c allegro;
 	vector<Worm> worms;
-	info data;
+	userData userData;
 	Evnt ev;
 
 	data.load(NULL, 3, NULL, 3);
-	worms.push_back(&data);
-	worms.push_back(&data);
+	worms.push_back(&userData);
+	worms.push_back(&userData);
 
 	while ((ev = getEvent(allegro->getEventQueue())) != QUIT)
 		if (ev != NOEVENT)
