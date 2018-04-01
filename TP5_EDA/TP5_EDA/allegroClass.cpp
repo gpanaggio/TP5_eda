@@ -28,7 +28,7 @@ allegro_c::allegro_c()
 											al_register_event_source(this->ev_queue, al_get_display_event_source(this->display));
 											al_register_event_source(this->ev_queue, al_get_timer_event_source(this->timer));
 											al_start_timer(this->timer);
-												
+
 										}
 									}
 								}
@@ -79,13 +79,13 @@ bool allegro_c::load_music(char * music_file) //Devuelve 1 si todo salio bien
 
 }
 
+void allegro_c::updateDisplay()
+{
+	al_flip_display();
+}
+
 ALLEGRO_EVENT_QUEUE * allegro_c::getEventQueue()
 {
 	return ev_queue;
-}
-
-ALLEGRO_TIMER * allegro_c::getTimer()
-{
-	return timer;
 }
 

@@ -58,7 +58,7 @@ void Worm::update()
 		}
 		else if (CountJump > JUMPSTART && CountJump < JUMPEND)	//el gusano volando
 		{
-			if (worm_direction == LEFT && (pos.get_x() > LEFTSTAGELIMIT)		//el gusano salta hacia la izquierda
+			if (worm_direction == LEFT && (pos.get_x() > LEFTSTAGELIMIT))		//el gusano salta hacia la izquierda
 			{
 				pos.set_x(pos.get_x() - VI * cos(THETA));
 			}
