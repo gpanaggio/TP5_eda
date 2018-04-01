@@ -1,7 +1,7 @@
 #include <allegro5\allegro.h>
 #include <vector>
 #include "Timer.h"
-#include "Worm.h"
+#include "Stage.h"
 
 using namespace std;
 
@@ -12,5 +12,5 @@ typedef enum Evnt {
 };
 
 
-void dispatchEvent(Evnt ev, vector<Worm> worms);
+void dispatchEvent(Evnt ev, Stage& stage);
 Evnt getEvent(ALLEGRO_EVENT_QUEUE *  eq);

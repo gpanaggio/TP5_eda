@@ -24,11 +24,11 @@ allegro_c::allegro_c()
 										if ((display = al_create_display(SCREEN_W, SCREEN_H)))
 										{
 
+											al_register_event_source(this->ev_queue, al_get_keyboard_event_source());
+											al_register_event_source(this->ev_queue, al_get_display_event_source(this->display));
+											al_register_event_source(this->ev_queue, al_get_timer_event_source(this->timer));
+											al_start_timer(this->timer);
 												
-												al_register_event_source(ev_queue, al_get_keyboard_event_source());
-												al_register_event_source(ev_queue, al_get_display_event_source(display));
-												al_register_event_source(ev_queue, al_get_timer_event_source(timer));
-												al_start_timer(this->timer);
 										}
 									}
 								}
@@ -67,7 +67,6 @@ allegro_c::~allegro_c()
 	al_shutdown_primitives_addon();
 	al_shutdown_image_addon();
 	al_uninstall_audio();
-	//l_uninstall_system();
 }
 bool allegro_c::load_music(char * music_file) //Devuelve 1 si todo salio bien
 {
