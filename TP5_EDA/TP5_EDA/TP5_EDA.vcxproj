@@ -117,14 +117,18 @@
   <ItemGroup>
     <ClInclude Include="allegroClass.h" />
     <ClInclude Include="EventHandler.h" />
+    <ClInclude Include="Position.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="userData.h" />
+    <ClInclude Include="Worm.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="allegroClass.cpp" />
     <ClCompile Include="EventHandler.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Position.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Worm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

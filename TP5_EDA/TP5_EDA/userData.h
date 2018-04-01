@@ -18,7 +18,7 @@ typedef struct {
 		string d;
 		string e = "wjump-F";
 
-		for (int i = 0; i > WALKING_MAX; i++) {
+		for (int i = 0; i < WALKING_MAX; i++) {
 			auto b = std::to_string(i);
 			d = a + b + c;
 			pWalk[i] = al_load_bitmap(d);
