@@ -117,15 +117,15 @@ void Worm::move(DIRECTION dir)
 	worm_direction = dir;
 }
 
-void Worm::draw(void)
+void Worm::draw(userData * data)
 {
 	if (estado == WALKRIGHT)
 	{
-		al_draw_bitmap(bitmapWalk[CountWalk], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
+		al_draw_bitmap(data->pWalk[CountWalk], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
 	}
 	else if (estado == WALKLEFT)
 	{
-		al_draw_bitmap(bitmapWalk[CountWalk], pos.get_x(), pos.get_y(), 0);
+		al_draw_bitmap(data->pWalk[CountWalk], pos.get_x(), pos.get_y(), 0);
 	}
 	else if (estado = SALTANDO)
 	{
@@ -133,30 +133,30 @@ void Worm::draw(void)
 		{
 			if (CountJump <= JUMPSTART)
 			{
-				al_draw_bitmap(bitmapJump[CountJump], pos.get_x(), pos.get_y(), 0);
+				al_draw_bitmap(data->pJump[CountJump], pos.get_x(), pos.get_y(), 0);
 			}
 			else if (CountJump < JUMPEND)
 			{
-				al_draw_bitmap(bitmapJump[5], pos.get_x(), pos.get_y() + tiro_oblicuo(), 0);	//dibujamos la imagen 5 (mirando a la izquierda)
+				al_draw_bitmap(data->pJump->pJumppJump[5], pos.get_x(), pos.get_y() + tiro_oblicuo(), 0);	//dibujamos la imagen 5 (mirando a la izquierda)
 			}
 			else
 			{
-				al_draw_bitmap(bitmapJump[CountJump - (JUMPEND - JUMPSTART)], pos.get_x(), pos.get_y(), 0);
+				al_draw_bitmap(data->pJump[CountJump - (JUMPEND - JUMPSTART)], pos.get_x(), pos.get_y(), 0);
 			}
 		}
 		else     //el worm mira para la derecha -> se espejan las imagenes
 		{
 			if (CountJump <= JUMPSTART)
 			{
-				al_draw_bitmap(bitmapJump[CountJump], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
+				al_draw_bitmap(data->pJump[CountJump], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
 			}
 			else if (CountJump < JUMPEND)
 			{
-				al_draw_bitmap(bitmapJump[5], pos.get_x(), pos.get_y() - tiro_oblicuo(), ALLEGRO_FLIP_HORIZONTAL);	//dibujamos la imagen 5 (mirando a la izquierda)
+				al_draw_bitmap(data->pJump[5], pos.get_x(), pos.get_y() - tiro_oblicuo(), ALLEGRO_FLIP_HORIZONTAL);	//dibujamos la imagen 5 (mirando a la izquierda)
 			}
 			else
 			{
-				al_draw_bitmap(bitmapJump[CountJump - (JUMPEND - JUMPSTART)], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
+				al_draw_bitmap(data->pJump[CountJump - (JUMPEND - JUMPSTART)], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
 			}
 		}
 		CountJump++;
@@ -164,9 +164,9 @@ void Worm::draw(void)
 	else if (estado == ESPERANDO)
 	{
 		if (worm_direction == LEFT) 
-		al_draw_bitmap(bitmapWalk[1], pos.get_x(), pos.get_y(), 0);
+		al_draw_bitmap(data->pWalk[1], pos.get_x(), pos.get_y(), 0);
 		else
-		al_draw_bitmap(bitmapWalk[1], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
+		al_draw_bitmap(data->pWalk[1], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
 	}
 }
 
