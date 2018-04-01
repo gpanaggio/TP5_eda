@@ -4,37 +4,9 @@
 
 Worm::Worm()
 {
-	bitmapWalk[0] = al_load_bitmap("wwalk-F1.png");
-	bitmapWalk[1] = al_load_bitmap("wwalk-F2.png");
-	bitmapWalk[2] = al_load_bitmap("wwalk-F3.png");
-	bitmapWalk[3] = al_load_bitmap("wwalk-F4.png");
-	bitmapWalk[4] = al_load_bitmap("wwalk-F5.png");
-	bitmapWalk[5] = al_load_bitmap("wwalk-F6.png");
-	bitmapWalk[6] = al_load_bitmap("wwalk-F7.png");
-	bitmapWalk[7] = al_load_bitmap("wwalk-F8.png");
-	bitmapWalk[8] = al_load_bitmap("wwalk-F9.png");
-	bitmapWalk[9] = al_load_bitmap("wwalk-F10.png");
-	bitmapWalk[10] = al_load_bitmap("wwalk-F11.png");
-	bitmapWalk[11] = al_load_bitmap("wwalk-F12.png");
-	bitmapWalk[12] = al_load_bitmap("wwalk-F13.png");
-	bitmapWalk[13] = al_load_bitmap("wwalk-F14.png");
-	bitmapWalk[14] = al_load_bitmap("wwalk-F15.png");
-
-	bitmapJump[0] = al_load_bitmap("wjump-F1.png");
-	bitmapJump[1] = al_load_bitmap("wjump-F2.png");
-	bitmapJump[2] = al_load_bitmap("wjump-F3.png");
-	bitmapJump[3] = al_load_bitmap("wjump-F4.png");
-	bitmapJump[4] = al_load_bitmap("wjump-F5.png");
-	bitmapJump[5] = al_load_bitmap("wjump-F6.png");
-	bitmapJump[6] = al_load_bitmap("wjump-F7.png");
-	bitmapJump[7] = al_load_bitmap("wjump-F8.png");
-	bitmapJump[8] = al_load_bitmap("wjump-F9.png");
-	bitmapJump[9] = al_load_bitmap("wjump-F10.png");
-
 	CountWalk = 0;
 	CountJump = 0;
 	warm_up = FRIO;	//el gusano esta en frio
-
 	estado = ESPERANDO;
 }
 
@@ -117,15 +89,15 @@ void Worm::move(DIRECTION dir)
 	worm_direction = dir;
 }
 
-void Worm::draw(void)
+void Worm::draw(userData * data)
 {
 	if (estado == WALKRIGHT)
 	{
-		al_draw_bitmap(bitmapWalk[CountWalk], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
+		al_draw_bitmap(data->pWalk[CountWalk], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
 	}
 	else if (estado == WALKLEFT)
 	{
-		al_draw_bitmap(bitmapWalk[CountWalk], pos.get_x(), pos.get_y(), 0);
+		al_draw_bitmap(data->pWalk[CountWalk], pos.get_x(), pos.get_y(), 0);
 	}
 	else if (estado = SALTANDO)
 	{
@@ -133,30 +105,30 @@ void Worm::draw(void)
 		{
 			if (CountJump <= JUMPSTART)
 			{
-				al_draw_bitmap(bitmapJump[CountJump], pos.get_x(), pos.get_y(), 0);
+				al_draw_bitmap(data->pJump[CountJump], pos.get_x(), pos.get_y(), 0);
 			}
 			else if (CountJump < JUMPEND)
 			{
-				al_draw_bitmap(bitmapJump[5], pos.get_x(), pos.get_y() + tiro_oblicuo(), 0);	//dibujamos la imagen 5 (mirando a la izquierda)
+				al_draw_bitmap(data->pJump->pJumppJump[5], pos.get_x(), pos.get_y() + tiro_oblicuo(), 0);	//dibujamos la imagen 5 (mirando a la izquierda)
 			}
 			else
 			{
-				al_draw_bitmap(bitmapJump[CountJump - (JUMPEND - JUMPSTART)], pos.get_x(), pos.get_y(), 0);
+				al_draw_bitmap(data->pJump[CountJump - (JUMPEND - JUMPSTART)], pos.get_x(), pos.get_y(), 0);
 			}
 		}
 		else     //el worm mira para la derecha -> se espejan las imagenes
 		{
 			if (CountJump <= JUMPSTART)
 			{
-				al_draw_bitmap(bitmapJump[CountJump], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
+				al_draw_bitmap(data->pJump[CountJump], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
 			}
 			else if (CountJump < JUMPEND)
 			{
-				al_draw_bitmap(bitmapJump[5], pos.get_x(), pos.get_y() - tiro_oblicuo(), ALLEGRO_FLIP_HORIZONTAL);	//dibujamos la imagen 5 (mirando a la izquierda)
+				al_draw_bitmap(data->pJump[5], pos.get_x(), pos.get_y() - tiro_oblicuo(), ALLEGRO_FLIP_HORIZONTAL);	//dibujamos la imagen 5 (mirando a la izquierda)
 			}
 			else
 			{
-				al_draw_bitmap(bitmapJump[CountJump - (JUMPEND - JUMPSTART)], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
+				al_draw_bitmap(data->pJump[CountJump - (JUMPEND - JUMPSTART)], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
 			}
 		}
 		CountJump++;
@@ -164,9 +136,9 @@ void Worm::draw(void)
 	else if (estado == ESPERANDO)
 	{
 		if (worm_direction == LEFT) 
-		al_draw_bitmap(bitmapWalk[1], pos.get_x(), pos.get_y(), 0);
+		al_draw_bitmap(data->pWalk[1], pos.get_x(), pos.get_y(), 0);
 		else
-		al_draw_bitmap(bitmapWalk[1], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
+		al_draw_bitmap(data->pWalk[1], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
 	}
 }
 
