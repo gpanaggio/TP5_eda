@@ -1,11 +1,10 @@
 #include <allegro5\allegro.h>
 #include <vector>
 #include "Timer.h"
-#include "Worm.h"		// Header de la clase Worm
+#include "Worm.h"
 
 using namespace std;
 
-typedef class Worm; //Solo para que no me putee visual
 
 
 typedef enum Evnt {
@@ -14,4 +13,4 @@ typedef enum Evnt {
 
 
 void dispatchEvent(Evnt ev, vector<Worm> worms);
-Evnt getEvent(ALLEGRO_EVENT_QUEUE * eq);
+Evnt getEvent(ALLEGRO_EVENT_QUEUE *  eq);

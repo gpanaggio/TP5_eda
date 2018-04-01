@@ -32,7 +32,7 @@ float Timer::getTime()
 	if (this->getStartValue && this->getStopValue)
 	{
 		this->timePassed = this->stopValue - this->startValue;
-		retValue = this->timePassed.count();
+		retValue = this->timePassed.count() * 1000;
 	}
 	return retValue;
 }

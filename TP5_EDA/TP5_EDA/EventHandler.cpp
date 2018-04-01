@@ -1,6 +1,7 @@
 #include <ctype.h>
 #include <vector>
 #include "EventHandler.h"
+#include <iostream>
 
 
 using namespace std;
@@ -11,12 +12,12 @@ void dispatchEvent(Evnt ev, vector<Worm> worms)
 {
 	switch (ev)
 	{
-	case LEFT1: worms[0].move(LEFT); break;			// yo lo habia pensado de la siguiente forma, move solo setea la direccion y cambia el
-	case LEFT2: worms[1].move(LEFT); break;			// estado a moviendose (Jump actua de forma similar pero toma la direccion actual).
-	case RIGHT1:worms[0].move(RIGHT); break;		// Despues, en la funcion update se deberia llamar a una funcion doJump()/doMove() que 
-	case RIGHT2:worms[1].move(RIGHT); break;		// efectue el movimiento.
-	case JUMP1:worms[0].jump(); break;				// draw va a dibujar la parte correcta de la animacion dependiendo del tick en el que		
-	case JUMP2:worms[1].jump(); break;				// este el worm
+	case LEFT1: worms[0].move(LEFT); break;
+	case LEFT2: worms[1].move(LEFT); break;
+	case RIGHT1:worms[0].move(RIGHT); break;
+	case RIGHT2:worms[1].move(RIGHT); break;
+	case JUMP1:worms[0].jump(); break;
+	case JUMP2:worms[1].jump(); break;
 	case TIMER:
 		for (Worm& worm : worms)
 		{
@@ -24,9 +25,9 @@ void dispatchEvent(Evnt ev, vector<Worm> worms)
 			worm.draw();
 		}
 	}
+
 }
 
-// Esta funcion basicamente transforma los eventos de allegro de teclado a los nuestros, definidos en el enum de arriba
 Evnt trasformAllegroEvents(int key) 
 {
 	Evnt ev = NOEVENT;
@@ -59,15 +60,16 @@ Evnt getEvent(ALLEGRO_EVENT_QUEUE * eq)
 {
 	ALLEGRO_EVENT ev;
 	Evnt retEv = NOEVENT;
-	int key = NOEVENT;
-
-	Timer * time = new Timer();
+	static int key = NOEVENT;
+	static Timer * time = NULL;
+	
 
 	al_get_next_event(eq, &ev);
 
 	switch (ev.type)
 	{
 	case ALLEGRO_EVENT_KEY_DOWN:
+		 time = new Timer();
 		time->start();
 		key = ev.keyboard.keycode;
 		break;
@@ -75,13 +77,18 @@ Evnt getEvent(ALLEGRO_EVENT_QUEUE * eq)
 		time->stop();
 		if (time->getTime() >= 100)
 			retEv = trasformAllegroEvents(key);
+			delete time; //Me parece medio raro lo de delete este time :/  tipo no se si siempre se deletea cachai antes de que se cree otro
 		break;
 	case ALLEGRO_EVENT_TIMER:
 		retEv = TIMER;
+
+		break;
+	case ALLEGRO_EVENT_DISPLAY_CLOSE:
+		retEv = QUIT;
 		break;
 	}
 
-	delete time;
+
 	return retEv;
 
 }
