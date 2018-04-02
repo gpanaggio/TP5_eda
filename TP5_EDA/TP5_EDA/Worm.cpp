@@ -1,6 +1,9 @@
 #include <iostream>
 #include "Worm.h"
 
+#define LEFTSTAGELIMIT 701
+#define RIGHTSTAGELIMIT	1212
+
 
 Worm::Worm()
 {
@@ -26,28 +29,25 @@ void Worm::update()
 				CountWalk = 0;
 			}
 		}
-		else if (estado == WALKLEFT && CountWalk == 15)		//luego tengo que fijarme el tema para que no se salga del escenario
+		else if (CountWalk == 15)		//luego tengo que fijarme el tema para que no se salga del escenario
 		{
 			CountWalk = 0;	//la logica de esto es que si entramos por 15 ves al update estando el Worm en caminando ya mostramos en pantalla
-			pos.set_x(pos.get_x() - 9);			//las 15 imagenes del Worm Walk que la ultima esta desplazada 9 pixeles respecto de la primera
-			if (++ciclos == 3)
+			if (++ciclos == 3)	//cuando completamos 3 veces la secuencia de caminata finaliza el movimiento
 			{
 				ciclos = 0;
 				warm_up = FRIO;
 				estado = ESPERANDO;
 			}
-		}
-		else if (estado == WALKRIGHT && CountWalk == 15)
-		{
-			CountWalk = 0;
-			pos.set_x(pos.get_x() + 9);
-			if (++ciclos == 3)					//el ciclo de caminar lo hace 3 veces luego de eso tiene que volver a calentar
+			if (estado == WALKLEFT && pos.get_x() > LEFTSTAGELIMIT)		// si el worm esta en borde no quedemos que se desplace
 			{
-				ciclos = 0;
-				warm_up = FRIO;
-				estado = ESPERANDO;
+				pos.set_x(pos.get_x() - 9);			//las 15 imagenes del Worm Walk que la ultima esta desplazada 9 pixeles respecto de la primera
+			}
+			else if (estado == WALKRIGHT && pos.get_x < RIGHTSTAGELIMIT)
+			{
+				pos.set_x(pos.get_x() + 9);
 			}
 		}
+		
 	}
 	else if (estado == SALTANDO)
 	{
@@ -58,18 +58,20 @@ void Worm::update()
 		}
 		else if (CountJump > JUMPSTART && CountJump < JUMPEND)	//el gusano volando
 		{
-			if (worm_direction == LEFT)		//el gusano salta hacia la izquierda
+			if (worm_direction == LEFT && (pos.get_x() > LEFTSTAGELIMIT)		//el gusano salta hacia la izquierda
 			{
 				pos.set_x(pos.get_x() - VI * cos(THETA));
-
 			}
-			else
+			else (worm_direction == RIGHT && (pos.get_x() < RIGHTSTAGELIMIT))
+			{
 				pos.set_x(pos.get_x() + VI * cos(THETA));
+			}
 		}
 		else if (CountJump == 42)		// aqui finaliza toda la sequencia de salto
 		{
 			CountJump = 0;
 			warm_up = FRIO;
+			estado == ESPERANDO
 		}
 	}
 	else if (estado == ESPERANDO)
@@ -109,7 +111,7 @@ void Worm::draw(userData * data)
 			}
 			else if (CountJump < JUMPEND)
 			{
-				al_draw_bitmap(data->pJump->pJumppJump[5], pos.get_x(), pos.get_y() + tiro_oblicuo(), 0);	//dibujamos la imagen 5 (mirando a la izquierda)
+				al_draw_bitmap(data->pJump->pJumppJump[5], pos.get_x(), pos.get_y() - tiro_oblicuo(), 0);	//dibujamos la imagen 5 (mirando a la izquierda)
 			}
 			else
 			{
