@@ -27,8 +27,10 @@ allegro_c::allegro_c()
 											al_register_event_source(this->ev_queue, al_get_keyboard_event_source());
 											al_register_event_source(this->ev_queue, al_get_display_event_source(this->display));
 											al_register_event_source(this->ev_queue, al_get_timer_event_source(this->timer));
+											al_set_window_title(display,"Master Race Arena");
 											al_start_timer(this->timer);
-												
+											ALLEGRO_BITMAP * icon=al_load_bitmap("icon.png");
+											al_set_display_icon(display, icon);
 										}
 									}
 								}
@@ -62,13 +64,15 @@ allegro_c::allegro_c()
 allegro_c::~allegro_c()
 {
 	al_destroy_display(display);
+	al_stop_samples();
+	al_destroy_sample(music);
 	al_destroy_timer(timer);
 	al_destroy_event_queue(ev_queue);
 	al_shutdown_primitives_addon();
 	al_shutdown_image_addon();
 	al_uninstall_audio();
 }
-bool allegro_c::load_music(char * music_file) //Devuelve 1 si todo salio bien
+bool allegro_c::load_music(const char * music_file) //Devuelve 1 si todo salio bien
 {
 	bool result;
 	if ((music = al_load_sample(music_file)))
@@ -79,13 +83,17 @@ bool allegro_c::load_music(char * music_file) //Devuelve 1 si todo salio bien
 
 }
 
+void allegro_c::updateDisplay()
+{
+	al_flip_display();
+}
+
 ALLEGRO_EVENT_QUEUE * allegro_c::getEventQueue()
 {
 	return ev_queue;
 }
 
-ALLEGRO_TIMER * allegro_c::getTimer()
+void allegro_c::play_music()
 {
-	return timer;
+	al_play_sample(music, 1.0, 1.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
 }
-

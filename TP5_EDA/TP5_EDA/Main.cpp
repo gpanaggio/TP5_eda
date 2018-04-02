@@ -3,7 +3,7 @@
 #include "info.h"  // Header de la estructura info
 
 
-
+typedef class Stage;
 typedef struct info;
 // Info seria la estructura que contiene cosas como las posiciones maximas y minimas a las que pueden acceder los worms, ademas de
 // un arreglo de punteros a bitmap para cada animacion. Si hay alguna otra informacion que sea igual para ambos worms y es constante,
@@ -16,7 +16,9 @@ int main() {
 	srand(time(NULL));
 
 	allegro_c allegro;
+	EventHandler eventHandler;
 	vector<Worm> worms;
+	Stage stage;
 	info data;
 	Evnt ev;
 
@@ -24,9 +26,9 @@ int main() {
 	worms.push_back(&data);
 	worms.push_back(&data);
 
-	while ((ev = getEvent(allegro->getEventQueue())) != QUIT)
-		if (ev != NOEVENT)
-			dispatchEvent(ev, worms);
+	while (eventHandler.getEvent(allegro.getEventQueue()))
+		if (eventHandler.isThereEvent())
+			eventHandler.handleEventDispatcher(stage);
 
 
 	data.unload(3, 3);

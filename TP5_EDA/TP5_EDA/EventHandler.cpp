@@ -3,17 +3,16 @@
 #include "EventHandler.h"
 #include <iostream>
 
-
 using namespace std;
 Evnt trasformAllegroEvents(int key);
 
 
-void dispatchEvent(Evnt ev, Stage& stage)
+void EventHandler::dispatchEvent(Evnt ev, Stage& stage)
 {
 	switch (ev)
 	{
-	case LEFT1: stage.worms[0].move(LEFT); break;
-	case LEFT2: stage.worms[1].move(LEFT); break;
+	case LEFT1: stage.worms[0].move(LEFT); break; 
+	case LEFT2: stage.worms[1].move(LEFT); break; 
 	case RIGHT1:stage.worms[0].move(RIGHT); break;
 	case RIGHT2:stage.worms[1].move(RIGHT); break;
 	case JUMP1:stage.worms[0].jump(); break;
@@ -53,42 +52,121 @@ Evnt trasformAllegroEvents(int key)
 	case ALLEGRO_KEY_UP:
 		ev = JUMP1;
 		break;
+	case ALLEGRO_KEY_ESCAPE:
+		ev = QUIT;
+		break;
 	}
 	return ev;
 }
 
-Evnt getEvent(ALLEGRO_EVENT_QUEUE * eq)
+EventHandler::EventHandler()
+{
+	for (Ev_t& ev : events)
+	{
+		ev.deactivate();
+		ev.time = NULL;
+	}
+}
+
+using namespace std;
+
+bool EventHandler::getEvent(ALLEGRO_EVENT_QUEUE * eq)
 {
 	ALLEGRO_EVENT ev;
-	Evnt retEv = NOEVENT;
-	static Timer * time = NULL;		// Ya se que no deberiamos usar 'static' pero necesito que este objeto no se destruya al terminar
-									// la funcion ya que es el encargado de regular el tiempo. Creo este objeto solo cuando se detecta 
-									// que se toco una tecla y lo destruyo cuando dejan de apretarla.
+	bool quit = false;
+
 	al_get_next_event(eq, &ev);
 
 
 	switch (ev.type)
 	{
 	case ALLEGRO_EVENT_KEY_DOWN:
-		 time = new Timer();
-		time->start();
+
+		if (ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE)
+			quit = true;
+		else
+			for (int i = 0; i < 2; ++i)			
+				if (!this->events[i].active && moveWorm(ev.keyboard.keycode, i) && !this->events[i].timerExist())
+					setEvent(trasformAllegroEvents(ev.keyboard.keycode), i);
 		break;
 	case ALLEGRO_EVENT_KEY_UP:
-		time->stop();
-		if (time->getTime() >= 100)
-			retEv = trasformAllegroEvents(ev.keyboard.keycode);
-			delete time; //Me parece medio raro lo de delete este time :/  tipo no se si siempre se deletea cachai antes de que se cree otro
-		
+
+		for (int i = 0; i < 2; ++i)
+			if (this->events[i].timerExist() && this->events[i].Event == trasformAllegroEvents(ev.keyboard.keycode))
+				if (this->events[i].timerGreaterThan(100))
+					this->events[i].activate();
 		break;
 	case ALLEGRO_EVENT_TIMER:
-		retEv = TIMER;
+		this->setEvent(TIMER, 2);
+		this->events[2].activate();
 		break;
 	case ALLEGRO_EVENT_DISPLAY_CLOSE:
-		retEv = QUIT;
+		quit = true;
 		break;
 	}
 
+	if (quit)
+		for (int i = 0; i < 2; i++)
+			if (this->events[i].timerExist())
+				this->events[i].killTimer();
+	
+	return !quit;
 
-	return retEv;
+}
 
+bool EventHandler::isThereEvent()
+{
+	return this->events[0].active || this->events[1].active || this->events[2].active;
+}
+
+void EventHandler::handleEventDispatcher(Stage& stage)
+{
+	if (this->events[2].active)
+	{
+		dispatchEvent(this->events[2].Event, stage);
+		this->events[2].deactivate();
+	}
+	else 
+	{
+		for (int i =0 ; i <2 ; i++)
+		{
+			if (this->events[i].active)
+			{
+				dispatchEvent(this->events[i].Event, stage);
+				this->events[i].deactivate();
+			}
+				
+		}
+	}
+}
+
+void EventHandler::setEvent(Evnt ev, int worm)
+{
+	this->events[worm].Event = ev;
+	if (ev != TIMER)
+		this->events[worm].newTimer();
+}
+
+bool EventHandler::moveWorm(int ev, int worm)
+{
+	bool retValue = false;
+
+	switch (worm)
+	{
+	case 0: retValue = moveWorm1(ev);
+		break;
+	case 1: retValue = moveWorm2(ev);
+		break;
+	}
+	return retValue;
+}
+
+bool EventHandler::moveWorm1(int ev)
+{
+	return ((ev == ALLEGRO_KEY_LEFT) || (ev == ALLEGRO_KEY_RIGHT) || (ev == ALLEGRO_KEY_UP));
+}
+
+bool EventHandler::moveWorm2(int ev)
+{
+	return ((ev == ALLEGRO_KEY_W) || (ev == ALLEGRO_KEY_A) || (ev == ALLEGRO_KEY_D));
 }
