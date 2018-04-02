@@ -1,6 +1,6 @@
 #include "allegroClass.h"
 #include "EventHandler.h"
-#include "info.h"  // Header de la estructura info
+#include "userData.h"  // Header de la estructura info
 
 
 typedef class Stage;
@@ -18,13 +18,17 @@ int main() {
 	allegro_c allegro;
 	EventHandler eventHandler;
 	vector<Worm> worms;
+
 	Stage stage;
-	info data;
+
+	userData userData;
+
+
 	Evnt ev;
 
-	data.load(NULL, 3, NULL, 3);
-	worms.push_back(&data);
-	worms.push_back(&data);
+	userData.loadBitmap(NULL, 3, NULL, 3);
+	worms.push_back(Worm(&userData));
+	worms.push_back(Worm(&userData));
 
 	while (eventHandler.getEvent(allegro.getEventQueue()))
 		if (eventHandler.isThereEvent())

@@ -1,3 +1,4 @@
+#include "userData.h"
 #include "Position.h"
 
 #define JUMPSTART 4		//porque el salto comienza en el 4to frame
@@ -15,16 +16,15 @@ private:
 	Position pos;
 	WORM_STATE estado;
 	DIRECTION worm_direction;
-	ALLEGRO_BITMAP ** bitmapWalk;
-	ALLEGRO_BITMAP ** bitmapJump;
+	userData * userDta;
 	unsigned int CountWalk;		//ayuda como parametro para saber que hacer cada ves que se llama a alguna funcion
 	unsigned int CountJump;		//y para saber en que instancia estamos de cada accion
 	bool warm_up;	//lo usamos para saber si el gusano esta calentando o moviendose
 public:
-	Worm();
+	Worm(userData*);
 	void update();
 	void move(DIRECTION);
-	void draw(void);
+	void draw();
 	void jump(void);
 	~Worm();
 };

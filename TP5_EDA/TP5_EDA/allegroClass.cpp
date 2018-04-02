@@ -29,8 +29,12 @@ allegro_c::allegro_c()
 											al_register_event_source(this->ev_queue, al_get_timer_event_source(this->timer));
 											al_set_window_title(display,"Master Race Arena");
 											al_start_timer(this->timer);
+<<<<<<< HEAD
 											ALLEGRO_BITMAP * icon=al_load_bitmap("icon.png");
 											al_set_display_icon(display, icon);
+=======
+
+>>>>>>> 16402f55fc9bad20c54cb0271c497641fa34fd09
 										}
 									}
 								}
@@ -84,16 +88,25 @@ bool allegro_c::load_music(const char * music_file) //Devuelve 1 si todo salio b
 }
 
 void allegro_c::updateDisplay()
+<<<<<<< HEAD
 {
 	al_flip_display();
 }
 
 ALLEGRO_EVENT_QUEUE * allegro_c::getEventQueue()
+=======
+>>>>>>> 16402f55fc9bad20c54cb0271c497641fa34fd09
 {
-	return ev_queue;
+	al_flip_display();
 }
 
+<<<<<<< HEAD
 void allegro_c::play_music()
 {
 	al_play_sample(music, 1.0, 1.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
+=======
+ALLEGRO_EVENT_QUEUE * allegro_c::getEventQueue()
+{
+	return ev_queue;
+>>>>>>> 16402f55fc9bad20c54cb0271c497641fa34fd09
 }

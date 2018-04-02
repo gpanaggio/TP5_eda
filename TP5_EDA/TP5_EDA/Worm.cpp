@@ -1,40 +1,16 @@
 #include <iostream>
 #include "Worm.h"
 
+#define LEFTSTAGELIMIT 701
+#define RIGHTSTAGELIMIT	1212
 
-Worm::Worm()
+
+Worm::Worm(userData * userDta_)
 {
-	bitmapWalk[0] = al_load_bitmap("wwalk-F1.png");
-	bitmapWalk[1] = al_load_bitmap("wwalk-F2.png");
-	bitmapWalk[2] = al_load_bitmap("wwalk-F3.png");
-	bitmapWalk[3] = al_load_bitmap("wwalk-F4.png");
-	bitmapWalk[4] = al_load_bitmap("wwalk-F5.png");
-	bitmapWalk[5] = al_load_bitmap("wwalk-F6.png");
-	bitmapWalk[6] = al_load_bitmap("wwalk-F7.png");
-	bitmapWalk[7] = al_load_bitmap("wwalk-F8.png");
-	bitmapWalk[8] = al_load_bitmap("wwalk-F9.png");
-	bitmapWalk[9] = al_load_bitmap("wwalk-F10.png");
-	bitmapWalk[10] = al_load_bitmap("wwalk-F11.png");
-	bitmapWalk[11] = al_load_bitmap("wwalk-F12.png");
-	bitmapWalk[12] = al_load_bitmap("wwalk-F13.png");
-	bitmapWalk[13] = al_load_bitmap("wwalk-F14.png");
-	bitmapWalk[14] = al_load_bitmap("wwalk-F15.png");
-
-	bitmapJump[0] = al_load_bitmap("wjump-F1.png");
-	bitmapJump[1] = al_load_bitmap("wjump-F2.png");
-	bitmapJump[2] = al_load_bitmap("wjump-F3.png");
-	bitmapJump[3] = al_load_bitmap("wjump-F4.png");
-	bitmapJump[4] = al_load_bitmap("wjump-F5.png");
-	bitmapJump[5] = al_load_bitmap("wjump-F6.png");
-	bitmapJump[6] = al_load_bitmap("wjump-F7.png");
-	bitmapJump[7] = al_load_bitmap("wjump-F8.png");
-	bitmapJump[8] = al_load_bitmap("wjump-F9.png");
-	bitmapJump[9] = al_load_bitmap("wjump-F10.png");
-
+	userDta = userDta_;
 	CountWalk = 0;
 	CountJump = 0;
 	warm_up = FRIO;	//el gusano esta en frio
-
 	estado = ESPERANDO;
 }
 
@@ -54,28 +30,25 @@ void Worm::update()
 				CountWalk = 0;
 			}
 		}
-		else if (estado == WALKLEFT && CountWalk == 15)		//luego tengo que fijarme el tema para que no se salga del escenario
+		else if (CountWalk == 15)		//luego tengo que fijarme el tema para que no se salga del escenario
 		{
 			CountWalk = 0;	//la logica de esto es que si entramos por 15 ves al update estando el Worm en caminando ya mostramos en pantalla
-			pos.set_x(pos.get_x() - 9);			//las 15 imagenes del Worm Walk que la ultima esta desplazada 9 pixeles respecto de la primera
-			if (++ciclos == 3)
+			if (++ciclos == 3)	//cuando completamos 3 veces la secuencia de caminata finaliza el movimiento
 			{
 				ciclos = 0;
 				warm_up = FRIO;
 				estado = ESPERANDO;
 			}
-		}
-		else if (estado == WALKRIGHT && CountWalk == 15)
-		{
-			CountWalk = 0;
-			pos.set_x(pos.get_x() + 9);
-			if (++ciclos == 3)					//el ciclo de caminar lo hace 3 veces luego de eso tiene que volver a calentar
+			if (estado == WALKLEFT && pos.get_x() > LEFTSTAGELIMIT)		// si el worm esta en borde no quedemos que se desplace
 			{
-				ciclos = 0;
-				warm_up = FRIO;
-				estado = ESPERANDO;
+				pos.set_x(pos.get_x() - 9);			//las 15 imagenes del Worm Walk que la ultima esta desplazada 9 pixeles respecto de la primera
+			}
+			else if (estado == WALKRIGHT && pos.get_x < RIGHTSTAGELIMIT)
+			{
+				pos.set_x(pos.get_x() + 9);
 			}
 		}
+		
 	}
 	else if (estado == SALTANDO)
 	{
@@ -86,18 +59,20 @@ void Worm::update()
 		}
 		else if (CountJump > JUMPSTART && CountJump < JUMPEND)	//el gusano volando
 		{
-			if (worm_direction == LEFT)		//el gusano salta hacia la izquierda
+			if (worm_direction == LEFT && (pos.get_x() > LEFTSTAGELIMIT))		//el gusano salta hacia la izquierda
 			{
 				pos.set_x(pos.get_x() - VI * cos(THETA));
-
 			}
-			else
+			else (worm_direction == RIGHT && (pos.get_x() < RIGHTSTAGELIMIT))
+			{
 				pos.set_x(pos.get_x() + VI * cos(THETA));
+			}
 		}
 		else if (CountJump == 42)		// aqui finaliza toda la sequencia de salto
 		{
 			CountJump = 0;
 			warm_up = FRIO;
+			estado == ESPERANDO;
 		}
 	}
 	else if (estado == ESPERANDO)
@@ -117,15 +92,15 @@ void Worm::move(DIRECTION dir)
 	worm_direction = dir;
 }
 
-void Worm::draw(void)
+void Worm::draw()
 {
 	if (estado == WALKRIGHT)
 	{
-		al_draw_bitmap(bitmapWalk[CountWalk], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
+		al_draw_bitmap(userDta->pWalk[CountWalk], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
 	}
 	else if (estado == WALKLEFT)
 	{
-		al_draw_bitmap(bitmapWalk[CountWalk], pos.get_x(), pos.get_y(), 0);
+		al_draw_bitmap(userDta->pWalk[CountWalk], pos.get_x(), pos.get_y(), 0);
 	}
 	else if (estado = SALTANDO)
 	{
@@ -133,30 +108,30 @@ void Worm::draw(void)
 		{
 			if (CountJump <= JUMPSTART)
 			{
-				al_draw_bitmap(bitmapJump[CountJump], pos.get_x(), pos.get_y(), 0);
+				al_draw_bitmap(userDta->pJump[CountJump], pos.get_x(), pos.get_y(), 0);
 			}
 			else if (CountJump < JUMPEND)
 			{
-				al_draw_bitmap(bitmapJump[5], pos.get_x(), pos.get_y() + tiro_oblicuo(), 0);	//dibujamos la imagen 5 (mirando a la izquierda)
+				al_draw_bitmap(userDta->pJump[5], pos.get_x(), pos.get_y() - tiro_oblicuo(), 0);	//dibujamos la imagen 5 (mirando a la izquierda)
 			}
 			else
 			{
-				al_draw_bitmap(bitmapJump[CountJump - (JUMPEND - JUMPSTART)], pos.get_x(), pos.get_y(), 0);
+				al_draw_bitmap(userDta->pJump[CountJump - (JUMPEND - JUMPSTART)], pos.get_x(), pos.get_y(), 0);
 			}
 		}
 		else     //el worm mira para la derecha -> se espejan las imagenes
 		{
 			if (CountJump <= JUMPSTART)
 			{
-				al_draw_bitmap(bitmapJump[CountJump], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
+				al_draw_bitmap(userDta->pJump[CountJump], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
 			}
 			else if (CountJump < JUMPEND)
 			{
-				al_draw_bitmap(bitmapJump[5], pos.get_x(), pos.get_y() - tiro_oblicuo(), ALLEGRO_FLIP_HORIZONTAL);	//dibujamos la imagen 5 (mirando a la izquierda)
+				al_draw_bitmap(userDta->pJump[5], pos.get_x(), pos.get_y() - tiro_oblicuo(), ALLEGRO_FLIP_HORIZONTAL);	//dibujamos la imagen 5 (mirando a la izquierda)
 			}
 			else
 			{
-				al_draw_bitmap(bitmapJump[CountJump - (JUMPEND - JUMPSTART)], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
+				al_draw_bitmap(userDta->pJump[CountJump - (JUMPEND - JUMPSTART)], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
 			}
 		}
 		CountJump++;
@@ -164,9 +139,9 @@ void Worm::draw(void)
 	else if (estado == ESPERANDO)
 	{
 		if (worm_direction == LEFT) 
-		al_draw_bitmap(bitmapWalk[1], pos.get_x(), pos.get_y(), 0);
+		al_draw_bitmap(userDta->pWalk[1], pos.get_x(), pos.get_y(), 0);
 		else
-		al_draw_bitmap(bitmapWalk[1], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
+		al_draw_bitmap(userDta->pWalk[1], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
 	}
 }
 
