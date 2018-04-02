@@ -5,8 +5,9 @@
 #define RIGHTSTAGELIMIT	1212
 
 
-Worm::Worm()
+Worm::Worm(userData * userDta_)
 {
+	userDta = userDta_;
 	CountWalk = 0;
 	CountJump = 0;
 	warm_up = FRIO;	//el gusano esta en frio
@@ -71,7 +72,7 @@ void Worm::update()
 		{
 			CountJump = 0;
 			warm_up = FRIO;
-			estado == ESPERANDO
+			estado == ESPERANDO;
 		}
 	}
 	else if (estado == ESPERANDO)
@@ -91,15 +92,15 @@ void Worm::move(DIRECTION dir)
 	worm_direction = dir;
 }
 
-void Worm::draw(userData * data)
+void Worm::draw()
 {
 	if (estado == WALKRIGHT)
 	{
-		al_draw_bitmap(data->pWalk[CountWalk], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
+		al_draw_bitmap(userDta->pWalk[CountWalk], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
 	}
 	else if (estado == WALKLEFT)
 	{
-		al_draw_bitmap(data->pWalk[CountWalk], pos.get_x(), pos.get_y(), 0);
+		al_draw_bitmap(userDta->pWalk[CountWalk], pos.get_x(), pos.get_y(), 0);
 	}
 	else if (estado = SALTANDO)
 	{
@@ -107,30 +108,30 @@ void Worm::draw(userData * data)
 		{
 			if (CountJump <= JUMPSTART)
 			{
-				al_draw_bitmap(data->pJump[CountJump], pos.get_x(), pos.get_y(), 0);
+				al_draw_bitmap(userDta->pJump[CountJump], pos.get_x(), pos.get_y(), 0);
 			}
 			else if (CountJump < JUMPEND)
 			{
-				al_draw_bitmap(data->pJump->pJumppJump[5], pos.get_x(), pos.get_y() - tiro_oblicuo(), 0);	//dibujamos la imagen 5 (mirando a la izquierda)
+				al_draw_bitmap(userDta->pJump[5], pos.get_x(), pos.get_y() - tiro_oblicuo(), 0);	//dibujamos la imagen 5 (mirando a la izquierda)
 			}
 			else
 			{
-				al_draw_bitmap(data->pJump[CountJump - (JUMPEND - JUMPSTART)], pos.get_x(), pos.get_y(), 0);
+				al_draw_bitmap(userDta->pJump[CountJump - (JUMPEND - JUMPSTART)], pos.get_x(), pos.get_y(), 0);
 			}
 		}
 		else     //el worm mira para la derecha -> se espejan las imagenes
 		{
 			if (CountJump <= JUMPSTART)
 			{
-				al_draw_bitmap(data->pJump[CountJump], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
+				al_draw_bitmap(userDta->pJump[CountJump], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
 			}
 			else if (CountJump < JUMPEND)
 			{
-				al_draw_bitmap(data->pJump[5], pos.get_x(), pos.get_y() - tiro_oblicuo(), ALLEGRO_FLIP_HORIZONTAL);	//dibujamos la imagen 5 (mirando a la izquierda)
+				al_draw_bitmap(userDta->pJump[5], pos.get_x(), pos.get_y() - tiro_oblicuo(), ALLEGRO_FLIP_HORIZONTAL);	//dibujamos la imagen 5 (mirando a la izquierda)
 			}
 			else
 			{
-				al_draw_bitmap(data->pJump[CountJump - (JUMPEND - JUMPSTART)], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
+				al_draw_bitmap(userDta->pJump[CountJump - (JUMPEND - JUMPSTART)], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
 			}
 		}
 		CountJump++;
@@ -138,9 +139,9 @@ void Worm::draw(userData * data)
 	else if (estado == ESPERANDO)
 	{
 		if (worm_direction == LEFT) 
-		al_draw_bitmap(data->pWalk[1], pos.get_x(), pos.get_y(), 0);
+		al_draw_bitmap(userDta->pWalk[1], pos.get_x(), pos.get_y(), 0);
 		else
-		al_draw_bitmap(data->pWalk[1], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
+		al_draw_bitmap(userDta->pWalk[1], pos.get_x(), pos.get_y(), ALLEGRO_FLIP_HORIZONTAL);
 	}
 }
 
