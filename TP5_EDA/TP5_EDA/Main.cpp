@@ -18,6 +18,7 @@ int main() {
 	allegro_c allegro;
 	vector<Worm> worms;
 	userData userData;
+	worms.push_back(Worm(&data));
 	Evnt ev;
 
 	data.load(NULL, 3, NULL, 3);
